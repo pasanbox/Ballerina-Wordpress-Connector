@@ -40,7 +40,7 @@ public type WordpressApiConnector object {
 };
 
 documentation {
-    Twitter Client object
+    Wordpress Client object
     E{{}}
     F{{wordpressApiConfig}} - Wordpress connector configurations
     F{{wordpressApiConnector}} - WordpressConnector Connector object
@@ -78,14 +78,16 @@ public type WordpressApiConfiguration record {
 
 documentation {
     Define the status
-    F{{createdAt}} - Created time of the status
-    F{{id}} - Id of the status
-    F{{title}} - Text message of the status
-    F{{content}} - Source app of the status
-    F{{status}} - Source app of the status
+    F{{modifiedGmt}} - Modified time of the wordpress post in GMT
+    F{{id}} - Unique ID of the post. API can access post using this id.
+    F{{title}} - Title of the post
+    F{{content}} - Content of the post
+    F{{status}} - Status of the post. i.e publish/draft/future/pending/trash
+    F{{authorId}} - Unique ID of the author of the post. API can access this author using user endpoint
+
 }
 public type WordpressApiPost record {
-    string createdAt;
+    string modifiedGmt;
     int id;
     string title;
     string content;
@@ -93,6 +95,15 @@ public type WordpressApiPost record {
     int authorId;
 };
 
+documentation {
+    Define the status
+    F{{date}} - Created time of the wordpress comment in GMT
+    F{{id}} - Unique ID of the comment. API can access this using comments endpoint.
+    F{{content}} - Content of the comment
+    F{{status}} - Status of the comment. i.e publish/draft/future/pending/trash
+    F{{postId}} - Unique ID of the post this comment belongs to
+
+}
 public type WordpressApiComment record {
     string date;
     int id;
@@ -108,9 +119,9 @@ public type WordpressApiAuthor record {
 };
 
 documentation {
-    Twitter Client Error
+    Wordpress Client Error
     F{{message}} - Error message of the response
-    F{{cause}} - The error which caused the Twitter error
+    F{{cause}} - The error which caused the Wordpress error
     F{{statusCode}} - Status code of the response
 }
 public type WordpressApiError record {

@@ -28,10 +28,12 @@ public type WordpressApiConnector object {
     public function getAllPosts() returns WordpressApiPost[]|WordpressApiError;
     public function getAllComments() returns WordpressApiComment[]|WordpressApiError;
     public function getPostForComment(WordpressApiComment comment) returns WordpressApiPost|WordpressApiError;
-    public function commentOnPost(WordpressApiPost post, WordpressApiComment comment) returns WordpressApiComment|WordpressApiError;
+    public function commentOnPost(WordpressApiPost post, WordpressApiComment comment) 
+        returns WordpressApiComment|WordpressApiError;
     public function getAuthorForPost(WordpressApiPost post) returns WordpressApiAuthor|WordpressApiError;
     private function doGetOnWordpressEndpoint(string wordpressEndPoint) returns json|WordpressApiError;
-    private function doPostOnWordpressEndpoint(string wordpressEndPoint, json jsonPayload) returns json|WordpressApiError;
+    private function doPostOnWordpressEndpoint(string wordpressEndPoint, json jsonPayload) 
+        returns json|WordpressApiError;
 };
 
 documentation {

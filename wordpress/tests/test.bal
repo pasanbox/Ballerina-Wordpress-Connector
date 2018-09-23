@@ -43,6 +43,10 @@ endpoint WordpressApiClient wordpressApiClient {
     password: testPassword   
 };
 
+function getErrorDescription (WordpressApiError err) returns string{
+    return "Status Code: " + err.statusCode + "|Error description:" + err.message;
+}
+
 @test:Config
 function testCreatePost() {
     WordpressApiPost wordpressTestPost = {
@@ -59,7 +63,7 @@ function testCreatePost() {
             test:assertTrue(wordpressResponsePost.title.contains(wordpressTestPost.title));
         }
         WordpressApiError err => {
-            test:assertFail(msg = err.message);
+            test:assertFail(msg = getErrorDescription(err));
         }
     }
 }
@@ -81,7 +85,7 @@ function testGetAllPosts() {
             test:assertTrue(foundTestPostInReply);
         }
         WordpressApiError err => {
-            test:assertFail(msg = err.message);
+            test:assertFail(msg = getErrorDescription(err));
         }
     }
 }
@@ -103,7 +107,7 @@ function testGetAllComments() {
             test:assertTrue(foundTestCommentInReply);
         }
         WordpressApiError err => {
-            test:assertFail(msg = err.message);
+            test:assertFail(msg = getErrorDescription(err));
         }
     }
 }
@@ -118,7 +122,8 @@ function testCommentOnPost() {
         status: WORDPRESS_POST_STATUS_PUBLISH
     };
     
-    var wordpressApiResponse = wordpressApiClient->commentOnPost(testContext.wordpressPost, wordpressInputComment);
+    var wordpressApiResponse = wordpressApiClient->commentOnPost(testContext.wordpressPost, 
+        wordpressInputComment);
 
     match wordpressApiResponse {
         WordpressApiComment wordpressResponseComment => {
@@ -126,7 +131,7 @@ function testCommentOnPost() {
             test:assertTrue(wordpressResponseComment.content.contains(wordpressInputComment.content));
         }
         WordpressApiError err => {
-            test:assertFail(msg = err.message);
+            test:assertFail(msg = getErrorDescription(err));
         }
     }
 
@@ -142,7 +147,7 @@ function testGetPostForComment() {
             test:assertTrue(wordpressResponsePost.title.contains(testContext.wordpressPost.title));
         }
         WordpressApiError err => {
-            test:assertFail(msg = err.message);
+            test:assertFail(msg = getErrorDescription(err));
         }
     }
 }
@@ -157,7 +162,7 @@ function testGetAuthorForPost() {
             test:assertTrue(wordpressResponseAuthor.email.contains(testAuthorEmail));
         }
         WordpressApiError err => {
-            test:assertFail(msg = err.message);
+            test:assertFail(msg = getErrorDescription(err));
         }
     }
 }

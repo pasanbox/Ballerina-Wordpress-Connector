@@ -24,10 +24,6 @@ public type WordpressApiConnector object {
     // public string password;
     public http:Client clientEndpoint = new;
 
-    documentation {
-        Create a new post from the authenticated user
-        P{{wordpressPost}} - The title of the new blog post
-        R{{}} - If success, returns Status object, else returns WordpressError object.}
     public function createPost(WordpressApiPost wordpressPost) returns WordpressApiPost|WordpressApiError;
     public function getAllPosts() returns WordpressApiPost[]|WordpressApiError;
     public function getAllComments() returns WordpressApiComment[]|WordpressApiError;
@@ -36,7 +32,6 @@ public type WordpressApiConnector object {
     public function getAuthorForPost(WordpressApiPost post) returns WordpressApiAuthor|WordpressApiError;
     private function doGetOnWordpressEndpoint(string wordpressEndPoint) returns json|WordpressApiError;
     private function doPostOnWordpressEndpoint(string wordpressEndPoint, json jsonPayload) returns json|WordpressApiError;
-
 };
 
 documentation {
@@ -64,7 +59,7 @@ public type WordpressApiClient object {
 
 documentation {
     Wordpress connector configurations can be setup here
-    F{{url}} - The Wordpress API URL
+    F{{url}} - The Wordpress API URL: given in format http://localhost:8888/wordpress/wp-json/
     F{{userName}} - The user name of the Wordpress account
     F{{password}} - The password of the Wordpress account
     F{{clientConfig}} - Client endpoint configurations provided by the user

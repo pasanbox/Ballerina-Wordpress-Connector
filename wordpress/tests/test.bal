@@ -26,8 +26,12 @@ import ballerina/math;
 @final string testPassword = config:getAsString("PASSWORD");
 @final string testAuthorEmail = config:getAsString("AUTHOR_EMAIL");
 
-WordpressApiPost wordpressPostInContext;
-WordpressApiComment wordpressCommentInContext;
+public type WordpressTestContext record { //stores entites through multiple tests
+    WordpressApiPost wordpressPost;
+    WordpressApiComment wordpressComment;
+};
+
+WordpressTestContext testContext = {};
 
 @final int randomPostIdLowerLimit = 0;
 @final int randomPostIdUpperLimit = 1000;
@@ -51,7 +55,7 @@ function testCreatePost() {
 
     match wordpressApiResponse {
         WordpressApiPost wordpressResponsePost => {
-            wordpressPostInContext = wordpressResponsePost;
+            testContext.wordpressPost = wordpressResponsePost;
             test:assertTrue(wordpressResponsePost.title.contains(wordpressTestPost.title));
         }
         WordpressApiError err => {
@@ -70,7 +74,7 @@ function testGetAllPosts() {
         WordpressApiPost[] wordpressPosts => {
             boolean foundTestPostInReply = false;
             foreach wordpressPost in wordpressPosts {
-                if (wordpressPost.id == wordpressPostInContext.id) {
+                if (wordpressPost.id == testContext.wordpressPost.id) {
                     foundTestPostInReply = true;
                 }
             }
@@ -92,7 +96,7 @@ function testGetAllComments() {
         WordpressApiComment[] wordpressComments => {
             boolean foundTestCommentInReply = false;
             foreach wordpressComment in wordpressComments {
-                if (wordpressComment.id == wordpressCommentInContext.id) {
+                if (wordpressComment.id == testContext.wordpressComment.id) {
                     foundTestCommentInReply = true;
                 }
             }
@@ -109,16 +113,16 @@ function testGetAllComments() {
 }
 function testCommentOnPost() {
     WordpressApiComment wordpressInputComment = {
-        postId: wordpressPostInContext.id,
+        postId: testContext.wordpressPost.id,
         content: "Test comment " + math:random(),
         status: WORDPRESS_POST_STATUS_PUBLISH
     };
     
-    var wordpressApiResponse = wordpressApiClient->commentOnPost(wordpressPostInContext, wordpressInputComment);
+    var wordpressApiResponse = wordpressApiClient->commentOnPost(testContext.wordpressPost, wordpressInputComment);
 
     match wordpressApiResponse {
         WordpressApiComment wordpressResponseComment => {
-            wordpressCommentInContext = wordpressResponseComment;
+            testContext.wordpressComment = wordpressResponseComment;
             test:assertTrue(wordpressResponseComment.content.contains(wordpressInputComment.content));
         }
         WordpressApiError err => {
@@ -132,10 +136,10 @@ function testCommentOnPost() {
     dependsOn: ["testCommentOnPost"]
 }
 function testGetPostForComment() {
-    var wordpressApiResponse = wordpressApiClient->getPostForComment(wordpressCommentInContext);
+    var wordpressApiResponse = wordpressApiClient->getPostForComment(testContext.wordpressComment);
     match wordpressApiResponse {
         WordpressApiPost wordpressResponsePost => {
-            test:assertTrue(wordpressResponsePost.title.contains(wordpressPostInContext.title));
+            test:assertTrue(wordpressResponsePost.title.contains(testContext.wordpressPost.title));
         }
         WordpressApiError err => {
             test:assertFail(msg = err.message);
@@ -147,7 +151,7 @@ function testGetPostForComment() {
     dependsOn: ["testCreatePost"]
 }
 function testGetAuthorForPost() {
-    var wordpressApiResponse = wordpressApiClient->getAuthorForPost(wordpressPostInContext);
+    var wordpressApiResponse = wordpressApiClient->getAuthorForPost(testContext.wordpressPost);
     match wordpressApiResponse {
         WordpressApiAuthor wordpressResponseAuthor => {
             test:assertTrue(wordpressResponseAuthor.email.contains(testAuthorEmail));

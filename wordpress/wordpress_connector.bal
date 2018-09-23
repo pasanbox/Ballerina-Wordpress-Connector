@@ -20,10 +20,20 @@ import ballerina/log;
 function WordpressApiConnector::doGetOnWordpressEndpoint(string wordpressEndPoint) returns json|WordpressApiError {
    endpoint http:Client clientEndpoint = self.clientEndpoint;
     WordpressApiError wordpressApiError = {};
+
+    log:printInfo("Calling GET request on endpoint: " + wordpressEndPoint);
     var response = clientEndpoint->get(wordpressEndPoint);   
     match response {
         http:Response resp => {
-            log:printInfo("Calling GET request on endpoint: " + wordpressEndPoint);
+            if (resp.statusCode != http:OK_200) {
+                log:printError("Received HTTP response with status code: " + resp.statusCode 
+                                + " and message: " + resp.reasonPhrase);
+                WordpressApiError err = {
+                    statusCode: resp.statusCode,
+                    message: resp.reasonPhrase
+                };
+                return err;
+            }
             var msg = resp.getJsonPayload();
             match msg {
                 json jsonResponse => {
@@ -50,12 +60,22 @@ function WordpressApiConnector::doPostOnWordpressEndpoint(string wordpressEndPoi
     WordpressApiError wordpressApiError = {};
     http:Request req = new;
     req.setPayload(jsonPayload);
+
+    log:printInfo("Calling POST request on endpoint: " + wordpressEndPoint);
+    log:printDebug("Input paylod for POST request: " + jsonPayload.toString());
     var response = clientEndpoint->post(wordpressEndPoint, req);
     
     match response {
         http:Response resp => {
-            log:printInfo("Calling POST request on endpoint: " + wordpressEndPoint);
-            log:printDebug("Input paylod for POST request: " + jsonPayload.toString());
+            if ((resp.statusCode != http:OK_200) && (resp.statusCode != http:CREATED_201)) {
+                log:printError("Received HTTP response with status code: " + resp.statusCode 
+                                + " and message: " + resp.reasonPhrase);
+                WordpressApiError err = {
+                    statusCode: resp.statusCode,
+                    message: resp.reasonPhrase
+                };
+                return err;
+            }
             var msg = resp.getJsonPayload();
             match msg {
                 json jsonResponse => {

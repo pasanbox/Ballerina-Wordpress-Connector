@@ -20,17 +20,9 @@
 @final string WORDPRESS_API_POST_ENDPOINT = "/wp/v2/posts";
 @final string WORDPRESS_API_COMMENT_ENDPOINT = "/wp/v2/comments";
 @final string WORDPRESS_API_USER_ENDPOINT = "/wp/v2/users";
+
+//string constants
 @final string WORDPRESS_POST_STATUS_PUBLISH = "publish";
 @final string WORDPRESS_POST_STATUS_DRAFT = "draft";
 
-//string constants
-@final string UTF_8 = "UTF-8";
-@final string STATUS = "status=";
-@final string ATTACHMENT_URL = "attachment_url=";
-@final string MEDIA_IDS = "media_ids=";
-@final string ID = "id=";
-@final string LAT = "&lat=";
-@final string LONG = "&long=";
-@final string POST = "POST";
-@final string GET = "GET";
-@final string JSON = ".json";
+//integer constants

@@ -1,4 +1,6 @@
-# Ballerina Wordpress Connector
+Connects to Wordpress from Ballerina.
+
+# Package Overview
 This is a [Ballerina](http://ballerina.io) wrapper for [Wordpress REST API](https://developer.wordpress.org/rest-api/).
 It allows a user to submit a post, comment on a post, retrieve posts and comments and find author detials for posts.
 It uses plugin [authentication](https://developer.wordpress.org/rest-api/using-the-rest-api/authentication/) using [Application Passwords](https://wordpress.org/plugins/application-passwords/) plugin.
@@ -21,7 +23,7 @@ The following sections provide you with information on how to use the Ballerina 
 - [Example](#example)
 
 
-##Working with Wordpress Connector actions
+## Working with Wordpress Connector actions
 
 All the actions return valid response or **WordpressError**. If the action is a success, the requested resource such as **WordPressPost**, **WordpressComment** or **WordpressAuthor** will be returned. Else a **WordpressError** object will be returned.
 

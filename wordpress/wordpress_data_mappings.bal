@@ -15,13 +15,14 @@
 // under the License.
 
 function convertWordpressReplyToPost(json jsonStatus) returns (WordpressApiPost) {
-    WordpressApiPost post = {};
-    post.createdAt = jsonStatus.modified_gmt != null ? jsonStatus.modified_gmt.toString() : "";
-    post.id = jsonStatus.id != null ? convertToInt(jsonStatus.id) : 0;
-    post.title = jsonStatus.title != null ? jsonStatus.title.rendered.toString() : "";
-    post.content = jsonStatus.content != null ? jsonStatus.content.raw.toString() : "";
-    post.status = jsonStatus.status != null ? jsonStatus.status.raw.toString() : "";
-    post.authorId = jsonStatus.author != null ? convertToInt(jsonStatus.author) : 0;
+    WordpressApiPost post = {
+        modifiedGmt: jsonStatus.modified_gmt != null ? jsonStatus.modified_gmt.toString() : "",
+        id: jsonStatus.id != null ? convertToInt(jsonStatus.id) : 0,
+        title: jsonStatus.title != null ? jsonStatus.title.rendered.toString() : "",
+        content: jsonStatus.content != null ? jsonStatus.content.raw.toString() : "",
+        status: jsonStatus.status != null ? jsonStatus.status.raw.toString() : "",
+        authorId: jsonStatus.author != null ? convertToInt(jsonStatus.author) : 0
+    };
     return post;
 }
 
@@ -36,12 +37,13 @@ function convertWordpressReplyToPosts(json jsonStatuses) returns WordpressApiPos
 }
 
 function convertWordpressReplyToComment(json jsonStatus) returns (WordpressApiComment) {
-    WordpressApiComment comment = {};
-    comment.date = jsonStatus.modified_gmt != null ? jsonStatus.modified_gmt.toString() : "";
-    comment.id = jsonStatus.id != null ? convertToInt(jsonStatus.id) : 0;
-    comment.authorEmail = jsonStatus.author_email != null ? jsonStatus.author_email.rendered.toString() : "";
-    comment.content = jsonStatus.content != null ? jsonStatus.content.rendered.toString() : "";
-    comment.postId = jsonStatus.post != null ? convertToInt(jsonStatus.post) : 0;
+    WordpressApiComment comment = {
+        date: jsonStatus.modified_gmt != null ? jsonStatus.modified_gmt.toString() : "",
+        id: jsonStatus.id != null ? convertToInt(jsonStatus.id) : 0,
+        authorEmail: jsonStatus.author_email != null ? jsonStatus.author_email.rendered.toString() : "",
+        content: jsonStatus.content != null ? jsonStatus.content.rendered.toString() : "",
+        postId: jsonStatus.post != null ? convertToInt(jsonStatus.post) : 0
+    };   
     return comment;
 }
 
@@ -56,9 +58,10 @@ function convertWordpressReplyToComments(json jsonStatuses) returns WordpressApi
 }
 
 function convertWordpressReplyToAuthor(json jsonStatus) returns (WordpressApiAuthor) {
-    WordpressApiAuthor author = {};
-    author.id = jsonStatus.id != null ? convertToInt(jsonStatus.id) : 0;
-    author.email = jsonStatus.email != null ? jsonStatus.email.toString() : "";
+    WordpressApiAuthor author = {
+        id: jsonStatus.id != null ? convertToInt(jsonStatus.id) : 0,
+        email: jsonStatus.email != null ? jsonStatus.email.toString() : ""
+    };
     return author;
 }
 

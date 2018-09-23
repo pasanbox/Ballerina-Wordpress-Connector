@@ -16,7 +16,7 @@
 // under the License.
 //
 
-//Twitter API endpoint
+//Wordpress API endpoint
 @final string WORDPRESS_API_POST_ENDPOINT = "/wp/v2/posts";
 @final string WORDPRESS_API_COMMENT_ENDPOINT = "/wp/v2/comments";
 @final string WORDPRESS_API_USER_ENDPOINT = "/wp/v2/users";

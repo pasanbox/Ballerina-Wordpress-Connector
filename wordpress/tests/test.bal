@@ -66,7 +66,6 @@ function testCreatePost() {
 }
 function testGetAllPosts() {    
     var wordpressApiResponse = wordpressApiClient->getAllPosts();
-
     match wordpressApiResponse {
         WordpressApiPost[] wordpressPosts => {
             boolean foundTestPostInReply = false;
@@ -89,7 +88,6 @@ function testGetAllPosts() {
 }
 function testGetAllComments() {    
     var wordpressApiResponse = wordpressApiClient->getAllComments();
-
     match wordpressApiResponse {
         WordpressApiComment[] wordpressComments => {
             boolean foundTestCommentInReply = false;
@@ -134,9 +132,7 @@ function testCommentOnPost() {
     dependsOn: ["testCommentOnPost"]
 }
 function testGetPostForComment() {
-
     var wordpressApiResponse = wordpressApiClient->getPostForComment(wordpressCommentInContext);
-
     match wordpressApiResponse {
         WordpressApiPost wordpressResponsePost => {
             test:assertTrue(wordpressResponsePost.title.contains(wordpressPostInContext.title));
@@ -151,9 +147,7 @@ function testGetPostForComment() {
     dependsOn: ["testCreatePost"]
 }
 function testGetAuthorForPost() {
-
     var wordpressApiResponse = wordpressApiClient->getAuthorForPost(wordpressPostInContext);
-
     match wordpressApiResponse {
         WordpressApiAuthor wordpressResponseAuthor => {
             test:assertTrue(wordpressResponseAuthor.email.contains(testAuthorEmail));

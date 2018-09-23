@@ -17,8 +17,10 @@
 import ballerina/io;
 import ballerina/log;
 
-function WordpressApiConnector::doGetOnWordpressEndpoint(string wordpressEndPoint) returns json|WordpressApiError {
-   endpoint http:Client clientEndpoint = self.clientEndpoint;
+function WordpressApiConnector::doGetOnWordpressEndpoint(string wordpressEndPoint) 
+    returns json|WordpressApiError {
+
+    endpoint http:Client clientEndpoint = self.clientEndpoint;
     WordpressApiError wordpressApiError = {};
 
     log:printInfo("Calling GET request on endpoint: " + wordpressEndPoint);
@@ -55,7 +57,9 @@ function WordpressApiConnector::doGetOnWordpressEndpoint(string wordpressEndPoin
     } 
 }
 
-function WordpressApiConnector::doPostOnWordpressEndpoint(string wordpressEndPoint, json jsonPayload) returns json|WordpressApiError {
+function WordpressApiConnector::doPostOnWordpressEndpoint(string wordpressEndPoint, json jsonPayload)
+    returns json|WordpressApiError {
+
     endpoint http:Client clientEndpoint = self.clientEndpoint;
     WordpressApiError wordpressApiError = {};
     http:Request req = new;
@@ -97,8 +101,14 @@ function WordpressApiConnector::doPostOnWordpressEndpoint(string wordpressEndPoi
     }
 }
 
-function WordpressApiConnector::createPost(WordpressApiPost wordpressPost) returns WordpressApiPost|WordpressApiError {
-    json post = { title: wordpressPost.title, content: wordpressPost.content, status: wordpressPost.status };
+function WordpressApiConnector::createPost(WordpressApiPost wordpressPost) 
+    returns WordpressApiPost|WordpressApiError {
+
+    json post = {
+         title: wordpressPost.title,
+         content: wordpressPost.content, 
+         status: wordpressPost.status 
+    };
     log:printDebug("Create Wordpress Post: " + post.toString());
 
     var response = self.doPostOnWordpressEndpoint(WORDPRESS_API_POST_ENDPOINT, post);
@@ -142,7 +152,9 @@ function WordpressApiConnector::getAllComments() returns WordpressApiComment[]|W
     }
 }
 
-function WordpressApiConnector::getPostForComment(WordpressApiComment comment) returns WordpressApiPost|WordpressApiError {
+function WordpressApiConnector::getPostForComment(WordpressApiComment comment) 
+    returns WordpressApiPost|WordpressApiError {
+
     log:printDebug("Get post which belongs the comment: " + comment.id);
     var response =  self.doGetOnWordpressEndpoint(WORDPRESS_API_POST_ENDPOINT + "/" + comment.postId);
     match response {
@@ -156,7 +168,9 @@ function WordpressApiConnector::getPostForComment(WordpressApiComment comment) r
     }
 }
 
-function WordpressApiConnector::commentOnPost(WordpressApiPost post, WordpressApiComment comment) returns WordpressApiComment|WordpressApiError {
+function WordpressApiConnector::commentOnPost(WordpressApiPost post, WordpressApiComment comment) 
+    returns WordpressApiComment|WordpressApiError {
+
     log:printDebug("Apply comment: " + comment.content + " on post: " + post.id);
 
     json jsonComment = { post: post.id, content: comment.content, status: comment.status };
@@ -172,9 +186,12 @@ function WordpressApiConnector::commentOnPost(WordpressApiPost post, WordpressAp
     }
 }
 
-function WordpressApiConnector::getAuthorForPost(WordpressApiPost post) returns WordpressApiAuthor|WordpressApiError {
+function WordpressApiConnector::getAuthorForPost(WordpressApiPost post) 
+    returns WordpressApiAuthor|WordpressApiError {
+
     log:printDebug("Get author of post: " + post.id);
-    var response =  self.doPostOnWordpressEndpoint(WORDPRESS_API_USER_ENDPOINT + "/" + post.authorId, {});
+    var response =  self.doPostOnWordpressEndpoint(WORDPRESS_API_USER_ENDPOINT + 
+                        "/" + post.authorId, {});
     match response {
         json jsonPayload => {
             return convertWordpressReplyToAuthor(jsonPayload);

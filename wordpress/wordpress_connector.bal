@@ -202,5 +202,3 @@ function WordpressApiConnector::getAuthorForPost(WordpressApiPost post)
             }
         }  
     }
-
-

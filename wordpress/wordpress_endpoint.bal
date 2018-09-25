@@ -21,12 +21,13 @@ import ballerina/http;
 function WordpressApiClient::init(WordpressApiConfiguration config) {
     config.clientConfig.url = config.url;
 
-    http:AuthConfig auth = {};
-    auth.scheme = http:BASIC_AUTH; //Will be upgraded to OAuth2 after Wordpress.org introduces it
-    auth.username = config.userName;
-    auth.password = config.password;
-    config.clientConfig.auth = auth;
+    http:AuthConfig auth = {
+        scheme: http:BASIC_AUTH,
+        username: config.userName,
+        password: config.password
+    };
 
+    config.clientConfig.auth = auth;
     self.wordpressApiConnector.clientEndpoint.init(config.clientConfig);
 }
 

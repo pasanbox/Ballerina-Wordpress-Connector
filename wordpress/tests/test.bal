@@ -14,24 +14,25 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerina/test;
-import ballerina/time;
-import ballerina/system;
 import ballerina/config;
 import ballerina/io;
 import ballerina/math;
+import ballerina/system;
+import ballerina/test;
 
 @final string wordpressSiteUrl = config:getAsString("SITE_URL");
 @final string testUsername = config:getAsString("USERNAME");
 @final string testPassword = config:getAsString("PASSWORD");
 @final string testAuthorEmail = config:getAsString("AUTHOR_EMAIL");
 
-public type WordpressTestContext record { //stores entites through multiple tests
+public type WordpressTestContext record {    //stores post,comment through multiple tests
     WordpressApiPost wordpressPost;
     WordpressApiComment wordpressComment;
 };
 
-WordpressTestContext testContext = {};
+WordpressTestContext testContext = {
+
+};
 
 @final int randomPostIdLowerLimit = 0;
 @final int randomPostIdUpperLimit = 1000;
@@ -39,12 +40,8 @@ WordpressTestContext testContext = {};
 endpoint WordpressApiClient wordpressApiClient {
     url: wordpressSiteUrl,
     userName: testUsername,
-    password: testPassword   
+    password: testPassword
 };
-
-function getErrorDescription (WordpressApiError err) returns string{
-    return "Status Code: " + err.statusCode + "|Error description:" + err.message;
-}
 
 @test:Config
 function testCreatePost() {
@@ -53,7 +50,7 @@ function testCreatePost() {
         content: "Test content " + math:random(),
         status: WORDPRESS_POST_STATUS_PUBLISH
     };
-   
+
     var wordpressApiResponse = wordpressApiClient->createPost(wordpressTestPost);
 
     match wordpressApiResponse {
@@ -71,7 +68,7 @@ function testCreatePost() {
     enable: true,
     dependsOn: ["testCreatePost"]
 }
-function testGetAllPosts() {    
+function testGetAllPosts() {
     var wordpressApiResponse = wordpressApiClient->getAllPosts();
     match wordpressApiResponse {
         WordpressApiPost[] wordpressPosts => {
@@ -90,10 +87,10 @@ function testGetAllPosts() {
 }
 
 @test:Config {
-    enable:true,
+    enable: true,
     dependsOn: ["testCommentOnPost"]
 }
-function testGetAllComments() {    
+function testGetAllComments() {
     var wordpressApiResponse = wordpressApiClient->getAllComments();
     match wordpressApiResponse {
         WordpressApiComment[] wordpressComments => {
@@ -119,7 +116,7 @@ function testCommentOnPost() {
         content: "Test comment " + math:random(),
         status: WORDPRESS_POST_STATUS_PUBLISH
     };
-    
+
     var wordpressApiResponse = wordpressApiClient->commentOnPost(testContext.wordpressPost, 
         wordpressInputComment);
 
@@ -164,3 +161,8 @@ function testGetAuthorForPost() {
         }
     }
 }
+
+function getErrorDescription (WordpressApiError err) returns string {
+    return "Status Code: " + err.statusCode + "|Error description:" + err.message;
+}
+

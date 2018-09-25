@@ -20,108 +20,109 @@ import ballerina/log;
 function WordpressApiConnector::doGetOnWordpressEndpoint(string wordpressEndPoint) 
     returns json|WordpressApiError {
 
-    endpoint http:Client clientEndpoint = self.clientEndpoint;
-    WordpressApiError wordpressApiError = {};
+        endpoint http:Client clientEndpoint = self.clientEndpoint;
+        WordpressApiError wordpressApiError = {};
 
-    log:printInfo("Calling GET request on endpoint: " + wordpressEndPoint);
-    var response = clientEndpoint->get(wordpressEndPoint);   
-    match response {
-        http:Response resp => {
-            if (resp.statusCode != http:OK_200) {
-                log:printError("Received HTTP response with status code: " + resp.statusCode 
-                                + " and message: " + resp.reasonPhrase);
-                WordpressApiError err = {
-                    statusCode: resp.statusCode,
-                    message: resp.reasonPhrase
-                };
-                return err;
-            }
-            var msg = resp.getJsonPayload();
-            match msg {
-                json jsonResponse => {
-                    log:printDebug("Reply from Wordpress API: " + jsonResponse.toString());
-                    return jsonResponse;
+        log:printInfo("Calling GET request on endpoint: " + wordpressEndPoint);
+        var response = clientEndpoint->get(wordpressEndPoint);   
+        match response {
+            http:Response resp => {
+                if (resp.statusCode != http:OK_200) {
+                    log:printError("Received HTTP response with status code: " 
+                        + resp.statusCode + " and message: " + resp.reasonPhrase);
+                    WordpressApiError err = {
+                        statusCode: resp.statusCode,
+                        message: resp.reasonPhrase
+                    };
+                    return err;
                 }
-                error err => {
-                    wordpressApiError.message = err.message;
-                    log:printError("JSON conversion failed: " + err.message);
-                    return wordpressApiError;
+                var msg = resp.getJsonPayload();
+                match msg {
+                    json jsonResponse => {
+                        log:printDebug("Reply from Wordpress API: " + 
+                            jsonResponse.toString());
+                        return jsonResponse;
+                    }
+                    error err => {
+                        wordpressApiError.message = err.message;
+                        log:printError("JSON conversion failed: " + err.message);
+                        return wordpressApiError;
+                    }
                 }
             }
-        }
-        error err => {
-            wordpressApiError.message = err.message;
-            log:printError("GET Request failed: " + err.message);
-            return wordpressApiError;
-        }
-    } 
-}
+            error err => {
+                wordpressApiError.message = err.message;
+                log:printError("GET Request failed: " + err.message);
+                return wordpressApiError;
+            }
+        } 
+    }
 
 function WordpressApiConnector::doPostOnWordpressEndpoint(string wordpressEndPoint, json jsonPayload)
     returns json|WordpressApiError {
 
-    endpoint http:Client clientEndpoint = self.clientEndpoint;
-    WordpressApiError wordpressApiError = {};
-    http:Request req = new;
-    req.setPayload(jsonPayload);
+        endpoint http:Client clientEndpoint = self.clientEndpoint;
+        WordpressApiError wordpressApiError = {};
+        http:Request req = new;
+        req.setPayload(jsonPayload);
 
-    log:printInfo("Calling POST request on endpoint: " + wordpressEndPoint);
-    log:printDebug("Input paylod for POST request: " + jsonPayload.toString());
-    var response = clientEndpoint->post(wordpressEndPoint, req);
+        log:printInfo("Calling POST request on endpoint: " + wordpressEndPoint);
+        log:printDebug("Input paylod for POST request: " + jsonPayload.toString());
+        var response = clientEndpoint->post(wordpressEndPoint, req);
     
-    match response {
-        http:Response resp => {
-            if ((resp.statusCode != http:OK_200) && (resp.statusCode != http:CREATED_201)) {
-                log:printError("Received HTTP response with status code: " + resp.statusCode 
-                                + " and message: " + resp.reasonPhrase);
-                WordpressApiError err = {
-                    statusCode: resp.statusCode,
-                    message: resp.reasonPhrase
-                };
-                return err;
-            }
-            var msg = resp.getJsonPayload();
-            match msg {
-                json jsonResponse => {
-                    log:printDebug("Reply from Wordpress API: " + jsonResponse.toString());
-                    return jsonResponse;
+        match response {
+            http:Response resp => {
+                if ((resp.statusCode != http:OK_200) && (resp.statusCode != http:CREATED_201)) {
+                    log:printError("Received HTTP response with status code: " +
+                         resp.statusCode + " and message: " + resp.reasonPhrase);
+                    WordpressApiError err = {
+                        statusCode: resp.statusCode,
+                        message: resp.reasonPhrase
+                    };
+                    return err;
                 }
-                error err => {
-                    wordpressApiError.message = err.message;
-                    log:printError("JSON conversion failed: " + err.message);
-                    return wordpressApiError;
+                var msg = resp.getJsonPayload();
+                match msg {
+                    json jsonResponse => {
+                        log:printDebug("Reply from Wordpress API: " + jsonResponse.toString());
+                        return jsonResponse;
+                    }
+                    error err => {
+                        wordpressApiError.message = err.message;
+                        log:printError("JSON conversion failed: " + err.message);
+                        return wordpressApiError;
+                    }
                 }
             }
-        }
-        error err => {
-            wordpressApiError.message = err.message;
-            log:printError("POST Request failed: " + err.message);
-            return wordpressApiError;
+            error err => {
+                wordpressApiError.message = err.message;
+                log:printError("POST Request failed: " + err.message);
+                return wordpressApiError;
             }    
+        }
     }
-}
 
 function WordpressApiConnector::createPost(WordpressApiPost wordpressPost) 
     returns WordpressApiPost|WordpressApiError {
 
-    json post = {
-         title: wordpressPost.title,
-         content: wordpressPost.content, 
-         status: wordpressPost.status 
-    };
-    log:printDebug("Create Wordpress Post: " + post.toString());
+        json post = {
+            title: wordpressPost.title,
+            content: wordpressPost.content, 
+            status: wordpressPost.status 
+        };
+        log:printDebug("Create Wordpress Post: " + post.toString());
 
-    var response = self.doPostOnWordpressEndpoint(WORDPRESS_API_POST_ENDPOINT, post);
-    match response {
-        json jsonPayload => {
-            return convertWordpressReplyToPost(jsonPayload);
-        }
-        WordpressApiError err => {
-            log:printError("Post creation failed");
-            return err;
+        var response = self.doPostOnWordpressEndpoint(WORDPRESS_API_POST_ENDPOINT, post);
+        match response {
+            json jsonPayload => {
+                return convertWordpressReplyToPost(jsonPayload);
+            }
+            WordpressApiError err => {
+                log:printError("Post creation failed");
+                return err;
+            }
         }
     }
-}
 
 function WordpressApiConnector::getAllPosts() returns WordpressApiPost[]|WordpressApiError {
     log:printDebug("Get all posts on site");
@@ -155,52 +156,51 @@ function WordpressApiConnector::getAllComments() returns WordpressApiComment[]|W
 function WordpressApiConnector::getPostForComment(WordpressApiComment comment) 
     returns WordpressApiPost|WordpressApiError {
 
-    log:printDebug("Get post which belongs the comment: " + comment.id);
-    var response =  self.doGetOnWordpressEndpoint(WORDPRESS_API_POST_ENDPOINT + "/" + comment.postId);
-    match response {
-        json jsonPayload => {
-            return convertWordpressReplyToPost(jsonPayload);
-        }
-        WordpressApiError err => {
-            log:printError("Finding post which belongs comment failed");
-            return err;
+        log:printDebug("Get post which belongs the comment: " + comment.id);
+        var response =  self.doGetOnWordpressEndpoint(WORDPRESS_API_POST_ENDPOINT +
+             "/" + comment.postId);
+        match response {
+            json jsonPayload => {
+                return convertWordpressReplyToPost(jsonPayload);
+            }
+            WordpressApiError err => {
+                log:printError("Finding post which belongs comment failed");
+                return err;
+            }
         }
     }
-}
 
 function WordpressApiConnector::commentOnPost(WordpressApiPost post, WordpressApiComment comment) 
     returns WordpressApiComment|WordpressApiError {
+        log:printDebug("Apply comment: " + comment.content + " on post: " + post.id);
 
-    log:printDebug("Apply comment: " + comment.content + " on post: " + post.id);
-
-    json jsonComment = { post: post.id, content: comment.content, status: comment.status };
-    var response = self.doPostOnWordpressEndpoint(WORDPRESS_API_COMMENT_ENDPOINT, jsonComment);
-    match response {
-        json jsonPayload => {
-            return convertWordpressReplyToComment(jsonPayload);
-        }
-        WordpressApiError err => {
-            log:printError("Commenting on post failed");
-            return err;
+        json jsonComment = { post: post.id, content: comment.content, status: comment.status };
+        var response = self.doPostOnWordpressEndpoint(WORDPRESS_API_COMMENT_ENDPOINT, jsonComment);
+        match response {
+            json jsonPayload => {
+                return convertWordpressReplyToComment(jsonPayload);
+            }
+            WordpressApiError err => {
+                log:printError("Commenting on post failed");
+                return err;
+            }
         }
     }
-}
 
 function WordpressApiConnector::getAuthorForPost(WordpressApiPost post) 
     returns WordpressApiAuthor|WordpressApiError {
-
-    log:printDebug("Get author of post: " + post.id);
-    var response =  self.doPostOnWordpressEndpoint(WORDPRESS_API_USER_ENDPOINT + 
+        log:printDebug("Get author of post: " + post.id);
+        var response =  self.doPostOnWordpressEndpoint(WORDPRESS_API_USER_ENDPOINT + 
                         "/" + post.authorId, {});
-    match response {
-        json jsonPayload => {
-            return convertWordpressReplyToAuthor(jsonPayload);
-        }
-        WordpressApiError err => {
-            log:printError("Get author of post failed");
-            return err;
-        }
-    }  
-}
+        match response {
+            json jsonPayload => {
+                return convertWordpressReplyToAuthor(jsonPayload);
+            }
+            WordpressApiError err => {
+                log:printError("Get author of post failed");
+                return err;
+            }
+        }  
+    }
 
 

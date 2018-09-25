@@ -36,7 +36,6 @@ WordpressTestContext testContext = {};
 @final int randomPostIdLowerLimit = 0;
 @final int randomPostIdUpperLimit = 1000;
 
-//OAuth2 not yet supported on Wordpress REST API.
 endpoint WordpressApiClient wordpressApiClient {
     url: wordpressSiteUrl,
     userName: testUsername,

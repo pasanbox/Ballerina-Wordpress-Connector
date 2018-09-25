@@ -21,9 +21,14 @@ The following sections provide you with information on how to use the Ballerina 
 - [Example](#example)
 
 
-##Working with Wordpress Connector actions
+## Working with Wordpress Connector actions
 
-All the actions return valid response or **WordpressError**. If the action is a success, the requested resource such as **WordPressPost**, **WordpressComment** or **WordpressAuthor** will be returned. Else a **WordpressError** object will be returned.
+First, import pasanw/wordpress package into your Ballerina project.
+```ballerina
+import pasanw/wordpress;
+```
+
+All the actions return valid response or **WordpressApiError**. If the action is a success, the requested resource such as **WordPressApiPost**, **WordpressApiComment** or **WordpressApiAuthor** will be returned. Else a **WordpressApiError** object will be returned.
 
 In order for you to use the Wordpress Connector, first you need to create a Wordpress Client endpoint.
 
@@ -38,7 +43,7 @@ endpoint wordpress:Client wordpressClient {
 ## Example
 
 ```ballerina
-import pasanbox/ballerina-wordpress-connector;
+import pasanw/wordpress;
 
 function main(string... args) {
     endpoint wordpress:WordpressApiClient wordpressApiClient {

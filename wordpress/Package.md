@@ -17,6 +17,7 @@ For the user/s you wish to use with the API follow the steps mentioned [here](ht
 | 0.981.1                    | 4.9.8                  |
 
 
+
 The following sections provide you with information on how to use the Ballerina Wordpress connector.
 
 - [Working with Wordpress Connector actions](#working-with-wordpress-connector-actions)
@@ -41,7 +42,7 @@ endpoint wordpress:Client wordpressClient {
 };
 ```
 
-##Examples
+## Examples
 
 ### Create a blog post
 
@@ -123,8 +124,8 @@ Retrieves all posts from the website (subject to Wordpress API constraints). Ple
 
 ### Retrive all comments
 
-Retrieves all posts from the website (subject to Wordpress API constraints). Please refer the [tests](https://github.com/pasanbox/ballerina-wordpress-connector/blob/master/wordpress/tests/test.bal) for an implementation example.
+Retrieves all comments from the website (subject to Wordpress API constraints). Please refer the [tests](https://github.com/pasanbox/ballerina-wordpress-connector/blob/master/wordpress/tests/test.bal) for an implementation example.
 
 ### Get author of a given post
 
-Retrieves all posts from the website (subject to Wordpress API constraints). Please refer the [tests](https://github.com/pasanbox/ballerina-wordpress-connector/blob/master/wordpress/tests/test.bal) for an implementation example.
+Retrieves the author of the given post as a **WordpressApiAuthor** object. Please refer the [tests](https://github.com/pasanbox/ballerina-wordpress-connector/blob/master/wordpress/tests/test.bal) for an implementation example.

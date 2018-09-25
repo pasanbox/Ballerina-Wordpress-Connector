@@ -1,5 +1,7 @@
 [project]
 org-name = "pasanw"
-version = "0.0.3"
+version = "0.0.4"
+repository = "https://github.com/pasanbox/ballerina-wordpress-connector"
+keywords = ["wordpress"]
 
 

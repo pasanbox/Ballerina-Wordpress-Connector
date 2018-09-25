@@ -116,7 +116,6 @@ function testGetAllComments() {
 }
 function testCommentOnPost() {
     WordpressApiComment wordpressInputComment = {
-        postId: testContext.wordpressPost.id,
         content: "Test comment " + math:random(),
         status: WORDPRESS_POST_STATUS_PUBLISH
     };

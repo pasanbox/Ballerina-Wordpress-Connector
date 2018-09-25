@@ -41,7 +41,19 @@ endpoint wordpress:Client wordpressClient {
 };
 ```
 
-## Example
+##Examples
+
+### Create a blog post
+
+Define the **WordpressApiClient** using the credential obtained earlier.
+Create a **WordpressApiPost** object with following parameters.
+
+- title - Title of the blog post
+- content - Content of the blog post
+- status - This can be publish or draft as required
+
+Then you can call the createPost method of the **WordpressApiClient** object passing this
+**WordpressApiPost** object as its argument. 
 
 ```ballerina
 import pasanw/wordpress;
@@ -62,7 +74,7 @@ function main(string... args) {
     var wordpressApiResponse = wordpressApiClient->createPost(wordpressTestPost);
 
     match wordpressApiResponse {
-        wordpress:WordpressApiPost wordpressResponsePost => {
+        wordpress:WordpressApiPost wordpressPost => {
             //Post successfully created
         }
         WordpressApiError err => {
@@ -71,3 +83,48 @@ function main(string... args) {
     }
 }
 ```
+
+This will return response when matched will resolve to a **WordpressApiResponse** on success and **WordpressApiError** on failure.
+
+
+
+### Comment on a post
+
+This package allows its users to comment on a post. 
+
+We need to have a **WordpressApiPost** object which we have in the program's context by retrieving or initially posting. For this example we will use the same post we obtained by matching the response from **Wordpres REST API**.
+Similar to the above you can use a **match** to resolve the reply from Wordpress.
+
+```ballerina
+WordpressApiComment wordpressInputComment = {
+        content: "Test comment " + math:random(),
+        status: WORDPRESS_POST_STATUS_PUBLISH
+    };
+    
+    var wordpressApiResponse = wordpressApiClient->commentOnPost(wordpressPost, 
+        wordpressInputComment);
+
+    match wordpressApiResponse {
+        WordpressApiComment wordpressResponseComment => {
+            testContext.wordpressComment = wordpressResponseComment;
+            test:assertTrue(wordpressResponseComment.content.contains(wordpressInputComment.content));
+        }
+        WordpressApiError err => {
+            test:assertFail(msg = getErrorDescription(err));
+        }
+    }
+```
+
+
+
+### Retrieve all posts
+
+Retrieves all posts from the website (subject to Wordpress API constraints). Please refer the [tests](https://github.com/pasanbox/ballerina-wordpress-connector/blob/master/wordpress/tests/test.bal) for an implementation example.
+
+### Retrive all comments
+
+Retrieves all posts from the website (subject to Wordpress API constraints). Please refer the [tests](https://github.com/pasanbox/ballerina-wordpress-connector/blob/master/wordpress/tests/test.bal) for an implementation example.
+
+### Get author of a given post
+
+Retrieves all posts from the website (subject to Wordpress API constraints). Please refer the [tests](https://github.com/pasanbox/ballerina-wordpress-connector/blob/master/wordpress/tests/test.bal) for an implementation example.

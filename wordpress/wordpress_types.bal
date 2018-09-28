@@ -20,10 +20,7 @@ documentation {
 }
 public type WordpressApiConnector object {
 
-    // public string userName;
-    // public string password;
     public http:Client clientEndpoint = new;
-
     public function createPost(WordpressApiPost wordpressPost) returns WordpressApiPost|WordpressApiError;
     public function getAllPosts() returns WordpressApiPost[]|WordpressApiError;
     public function getAllComments() returns WordpressApiComment[]|WordpressApiError;

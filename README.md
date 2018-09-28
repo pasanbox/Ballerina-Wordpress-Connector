@@ -7,8 +7,6 @@ It uses plugin [authentication](https://developer.wordpress.org/rest-api/using-t
 You need a Wordpress site installed with [Application Passwords](https://wordpress.org/plugins/application-passwords/) plugin.
 For the user/s you wish to use with the API follow the steps mentioned [here](https://wordpress.org/plugins/application-passwords/) and create a password. Then you can use those credentials for authentication.
 
-**Wordpress REST API does not natively support OAuth 2.0 at the moment. Hence we used Application Passwords plugin as [recommended](https://developer.wordpress.org/rest-api/using-the-rest-api/authentication/#authentication-plugins) by Wordpress.**
-
 ## Compatibility
 | Ballerina Language Version | Wordpress API version  |
 | -------------------------- | --------------------   |
